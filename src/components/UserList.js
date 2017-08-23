@@ -1,8 +1,10 @@
 import React from "react";
 import UserCard from "./UserCard";
 
-const UserList = ({ users, isFetching }) => {
-  const userList = users.map(user => <UserCard user={user} key={user.id} />);
+const UserList = ({ users, isFetching, handlers }) => {
+  const userList = users.map(user =>
+    <UserCard user={user} key={user.id} handlers={handlers} />
+  );
 
   return (
     <div className="container">

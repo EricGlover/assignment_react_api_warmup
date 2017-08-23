@@ -63,8 +63,13 @@ class AppContainer extends Component {
     }
   };
 
+  onDelUser = async e => {
+    console.log("EVENT: ", e.target);
+  };
+
   render() {
-    return <App onAddUser={this.onAddUser} {...this.state} />;
+    const handlers = { onAddUser: this.onAddUser, onDelUser: this.onDelUser };
+    return <App handlers={handlers} {...this.state} />;
   }
 }
 
