@@ -16,6 +16,11 @@ const UserCard = ({ user, handlers }) => {
             Delete
           </Button>
         </UserButtonForm>
+        <UserButtonForm onSubmit={handlers.onDisplayEdit} id={id}>
+          <Button type="submit" color="warning">
+            Edit
+          </Button>
+        </UserButtonForm>
       </div>
     </div>
   );

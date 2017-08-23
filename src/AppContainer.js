@@ -7,7 +7,9 @@ class AppContainer extends Component {
     super();
     this.state = {
       users: [],
-      isFetching: false
+      isFetching: false,
+      isEditing: false,
+      editUser: {}
     };
   }
 
@@ -79,29 +81,62 @@ class AppContainer extends Component {
       this.handleError(error);
     }
   };
+
   onEditUser = async e => {
     try {
       e.preventDefault();
       const form = e.target;
+      const { id } = form;
+
+      const body = serialize(form, { hash: true });
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
       const options = {
-        method: "PUT"
+        headers,
+        method: "PUT",
+        body: JSON.stringify(body)
       };
+
       const res = await fetch(`https://reqres.in/api/users/${id}`, options);
       if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
       else {
-        //let users = this.state.users.filter(user => user.id !== id);
-        //this.setState({ users });
+        const json = await res.json();
+        let users = this.state.users.map(
+          user => (user.id === id ? json : user)
+        );
+        this.setState({ users });
       }
     } catch (error) {
       this.handleError(error);
     }
   };
+
+  onDisplayEdit = e => {
+    e.preventDefault();
+    const id = Number(e.target.id);
+    const user = this.state.users.reduce((acc, user) => {
+      return user.id === id ? user : acc;
+    }, null);
+
+    if (user) {
+      this.setState({
+        isEditing: true,
+        editUser: user
+      });
+    }
+  };
+
   handleError = error => {
     console.log(error);
     this.setState({ isFetching: false, error });
   };
   render() {
-    const handlers = { onAddUser: this.onAddUser, onDelUser: this.onDelUser };
+    const handlers = {
+      onAddUser: this.onAddUser,
+      onDelUser: this.onDelUser,
+      onEditUser: this.onEditUser,
+      onDisplayEdit: this.onDisplayEdit
+    };
     return <App handlers={handlers} {...this.state} />;
   }
 }

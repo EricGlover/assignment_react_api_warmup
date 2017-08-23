@@ -5,7 +5,7 @@ import JumbotronFluid from "./elements/JumbotronFluid";
 import Alert from "./elements/Alert";
 import Showable from "./elements/Showable";
 
-const App = ({ users, isFetching, error, handlers }) =>
+const App = ({ users, isFetching, error, handlers, isEditing, editUser }) =>
   <div className="App">
     <JumbotronFluid
       heading="User CRUD"
@@ -15,8 +15,17 @@ const App = ({ users, isFetching, error, handlers }) =>
       <Alert type="danger">Oops, there was a problem...</Alert>
     </Showable>
     <UserList handlers={handlers} users={users} isFetching={isFetching} />
+    <Showable show={isEditing}>
+      <UserForm
+        title="Edit"
+        editUser={editUser}
+        onSubmit={handlers.onAddUser}
+      />
+    </Showable>
     <br />
-    <UserForm onSubmit={handlers.onAddUser} />
+    <Showable show={!isEditing}>
+      <UserForm title="Add a new user:" onSubmit={handlers.onAddUser} />
+    </Showable>
   </div>;
 
 export default App;
