@@ -12,13 +12,13 @@ const UserForm = ({ title, onSubmit, editUser }) => {
       </h2>
       <input type="hidden" name="id" value={editUser.id} />
       <InputGroup name="first_name" labelText="First Name">
-        <Input name="first_name" />
+        <Input name="first_name" defaultValue={editUser.first_name} />
       </InputGroup>
       <InputGroup name="last_name" labelText="Last Name">
-        <Input name="last_name" />
+        <Input name="last_name" defaultValue={editUser.last_name} />
       </InputGroup>
       <InputGroup name="avatar" labelText="Photo Link">
-        <Input name="avatar" />
+        <Input name="avatar" defaultValue={editUser.avatar} />
       </InputGroup>
       <Button type="submit" color="primary">
         Save User

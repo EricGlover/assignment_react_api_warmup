@@ -19,7 +19,7 @@ const App = ({ users, isFetching, error, handlers, isEditing, editUser }) =>
       <UserForm
         title="Edit"
         editUser={editUser}
-        onSubmit={handlers.onAddUser}
+        onSubmit={handlers.onEditUser}
       />
     </Showable>
     <br />

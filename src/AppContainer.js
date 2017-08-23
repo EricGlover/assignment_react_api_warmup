@@ -86,9 +86,9 @@ class AppContainer extends Component {
     try {
       e.preventDefault();
       const form = e.target;
-      const { id } = form;
-
       const body = serialize(form, { hash: true });
+      const id = Number(body.id);
+
       const headers = new Headers();
       headers.append("Content-Type", "application/json");
       const options = {
@@ -104,20 +104,23 @@ class AppContainer extends Component {
         let users = this.state.users.map(
           user => (user.id === id ? json : user)
         );
-        this.setState({ users });
+        this.setState({ users, isEditing: false, editUser: {} });
       }
     } catch (error) {
       this.handleError(error);
+      this.setState({
+        isEditing: false,
+        editUser: {}
+      });
     }
   };
 
   onDisplayEdit = e => {
     e.preventDefault();
-    const id = Number(e.target.id);
+    const id = Number(serialize(e.target, { hash: true }).id);
     const user = this.state.users.reduce((acc, user) => {
       return user.id === id ? user : acc;
     }, null);
-
     if (user) {
       this.setState({
         isEditing: true,
