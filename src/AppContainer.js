@@ -70,11 +70,27 @@ class AppContainer extends Component {
         method: "DELETE"
       };
       const res = await fetch(`https://reqres.in/api/users/${id}`, options);
-      console.log(res);
       if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
       else {
         let users = this.state.users.filter(user => user.id !== id);
         this.setState({ users });
+      }
+    } catch (error) {
+      this.handleError(error);
+    }
+  };
+  onEditUser = async e => {
+    try {
+      e.preventDefault();
+      const form = e.target;
+      const options = {
+        method: "PUT"
+      };
+      const res = await fetch(`https://reqres.in/api/users/${id}`, options);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      else {
+        //let users = this.state.users.filter(user => user.id !== id);
+        //this.setState({ users });
       }
     } catch (error) {
       this.handleError(error);
