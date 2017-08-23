@@ -25,8 +25,7 @@ class AppContainer extends Component {
         });
       }
     } catch (error) {
-      console.log(error);
-      this.setState({ isFetching: false, error });
+      this.handleError(error);
     }
   }
 
@@ -58,15 +57,33 @@ class AppContainer extends Component {
         form.reset();
       }
     } catch (error) {
-      console.log(error);
-      this.setState({ isFetching: false, error });
+      this.handleError(error);
     }
   };
 
   onDelUser = async e => {
-    console.log("EVENT: ", e.target);
+    try {
+      e.preventDefault();
+      const form = e.target;
+      const id = Number(serialize(form, { hash: true }).id);
+      const options = {
+        method: "DELETE"
+      };
+      const res = await fetch(`https://reqres.in/api/users/${id}`, options);
+      console.log(res);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      else {
+        let users = this.state.users.filter(user => user.id !== id);
+        this.setState({ users });
+      }
+    } catch (error) {
+      this.handleError(error);
+    }
   };
-
+  handleError = error => {
+    console.log(error);
+    this.setState({ isFetching: false, error });
+  };
   render() {
     const handlers = { onAddUser: this.onAddUser, onDelUser: this.onDelUser };
     return <App handlers={handlers} {...this.state} />;

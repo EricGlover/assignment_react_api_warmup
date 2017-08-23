@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "./elements/Button";
+import UserButtonForm from "./UserButtonForm";
 
 const UserCard = ({ user, handlers }) => {
-  const { first_name, last_name, avatar } = user;
+  const { first_name, last_name, avatar, id } = user;
   return (
     <div className="UserCard card" style={{ maxWidth: `128px` }}>
       <img className="card-img-top img-fluid" src={avatar} alt="user avatar" />
@@ -10,9 +11,11 @@ const UserCard = ({ user, handlers }) => {
         <h4>
           {first_name} {last_name}
         </h4>
-        <Button onClick={handlers.onDelUser} type="button" color="danger">
-          Delete
-        </Button>
+        <UserButtonForm onSubmit={handlers.onDelUser} id={id}>
+          <Button type="submit" color="danger">
+            Delete
+          </Button>
+        </UserButtonForm>
       </div>
     </div>
   );
