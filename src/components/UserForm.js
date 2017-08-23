@@ -2,15 +2,10 @@ import React from "react";
 import Input from "./elements/Input";
 import InputGroup from "./elements/InputGroup";
 import Button from "./elements/Button";
-import Alert from "./elements/Alert";
-import Showable from "./elements/Showable";
 
-const UserForm = ({ onSubmit, error }) =>
+const UserForm = ({ onSubmit }) =>
   <form className="container" onSubmit={onSubmit}>
     <h2>Add New User</h2>
-    <Showable show={error}>
-      <Alert type="danger">Oops, there was a problem...</Alert>
-    </Showable>
     <InputGroup name="first_name" labelText="First Name">
       <Input name="first_name" />
     </InputGroup>

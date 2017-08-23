@@ -11,55 +11,56 @@ class AppContainer extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setState({ isFetching: true });
-    fetch("https://reqres.in/api/users?delay=3")
-      .then(response => response.json())
-      .then(json => {
+  async componentDidMount() {
+    try {
+      this.setState({ isFetching: true });
+      const res = await fetch("https://reqres.in/api/users/?delay=2");
+
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      else {
+        const json = await res.json();
         this.setState({
           users: json.data,
           isFetching: false
         });
-      });
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ isFetching: false, error });
+    }
   }
 
-  onAddUser = e => {
-    e.preventDefault();
-    const form = e.target;
-    const body = serialize(form, { hash: true });
+  onAddUser = async e => {
+    try {
+      e.preventDefault();
+      const form = e.target;
+      this.setState({ isFetching: true });
 
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
+      const body = serialize(form, { hash: true });
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+      const options = {
+        headers,
+        method: "POST",
+        body: JSON.stringify(body),
+        error: ""
+      };
 
-    const options = {
-      headers,
-      method: "POST",
-      body: JSON.stringify(body),
-      error: ""
-    };
-    this.setState({ isFetching: true });
+      const res = await fetch("https://reqres.in/api/users", options);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      else {
+        const json = await res.json();
+        await this.setState({
+          isFetching: false,
+          users: [...this.state.users, json]
+        });
 
-    fetch("https://reqres.in/api/users", options)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`${response.status} ${response.statusText}`);
-        }
-
-        return response.json();
-      })
-      .then(json => {
-        this.setState(
-          {
-            isFetching: false,
-            users: [...this.state.users, json]
-          },
-          () => form.reset()
-        );
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({ isFetching: false, error });
-      });
+        form.reset();
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ isFetching: false, error });
+    }
   };
 
   render() {
